@@ -16,7 +16,9 @@
 .PARAMETER credential
 	It is possible to use PSCredential object to pass the authentication
 .EXAMPLE
-	.\Install-VIB-VMhost.ps1 -hostname esx-01a.corp.local -filepath c:\n1k.zip -dryrun $false
+    .\Install-VIB-VMhost.ps1 -hostname esx-01a.corp.local -filepath c:\n1k.zip -dryrun $false
+.EXAMPLE
+    Get-VMhost esx-01.corp.local | .\Install-VIB-VMhost.ps1 -filepath c:\n1k.zip 
 #>
 
 Param(
