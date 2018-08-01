@@ -1,4 +1,4 @@
-﻿<# 	
+<# 	
  .SYNOPSIS  
  	Install an offline bundle on ESXi without a vCenter connection.
 .DESCRIPTION 
@@ -50,7 +50,7 @@ $datastore = Get-Datastore -Server $vihost -name $datastorename
 if (!$datastore) { Write-Host "Error datastore not found" ; exit 1}
 }
 else {
-    $numds = get-datastore -server $vihost | measure
+    $numds = get-datastore -server $vihost | Measure-Object
     if ($numds.count -ne 1 ) { Write-Host "More than one datastore found. Please specify the name"; exit 1 }
     $datastore = Get-Datastore -Server $vihost }
     co
