@@ -1,6 +1,6 @@
-<# 	Name: Install-VIB-VMHost.ps1
+﻿<# 	Name: Install-VIB-VMHost.ps1
 	Author: Alessandro Lorusso
-	Date: 6/8/2017
+	Date: 31/7/2018
 	Synopsis:Install custom VIB on Host
     Description: Installation of a custom VIB on ESXi Host  using direct connection to ESXi interface
 	
@@ -15,22 +15,31 @@ Param(
     [parameter(mandatory = $false, HelpMessage = "Enter Datastore Name")]
         [String]$datastorename,
     [parameter(mandatory = $false, HelpMessage = 'Enter DryRun $false or $true')]
-        [String]$dryrun = $true
+        [String]$dryrun = $true,
+    [parameter(mandatory = $false)]
+        [PSCredential]$credential
 	)
 
 
 <#Connection to host#>
-$vihost = Connect-VIserver $hostname -user "root" -Password "VMware1!"
+if ($credential) {
+    $vihost = connect-viserver $hostname -Credential $credential }
+else {
+$vihost = Connect-VIserver $hostname }
+
 if (!$vihost.IsConnected) { Write-Host "Error on connection" ; exit 1 }
 
 <#Get local datastore#>
 if ($datastorename) {
-$datastore = Get-Datastore -Server $vihost -name $datastorename }
+$datastore = Get-Datastore -Server $vihost -name $datastorename
+if (!$datastore) { Write-Host "Error datastore not found" ; exit 1}
+}
 else {
-$datastore = Get-Datastore -Server $vihost }
+    $numds = get-datastore -server $vihost | measure
+    if ($numds.count -ne 1 ) { Write-Host "More than one datastore found. Please specify the name"; exit 1 }
+    $datastore = Get-Datastore -Server $vihost }
+    co
 
-
-if ($datastore.gettype().name -ne "VmfsDatastoreImpl" ) { Write-Host "More than one datastore found. Please specify the name"; exit 1 }
 
 <# Datastore size #>
 $sizeVIB = (get-item $filepath).Length
