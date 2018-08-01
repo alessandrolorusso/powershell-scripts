@@ -1,9 +1,22 @@
-﻿<# 	Name: Install-VIB-VMHost.ps1
-	Author: Alessandro Lorusso
-	Date: 31/7/2018
-	Synopsis:Install custom VIB on Host
-    Description: Installation of a custom VIB on ESXi Host  using direct connection to ESXi interface
-	
+﻿<# 	
+ .SYNOPSIS  
+ 	Install an offline bundle on ESXi without a vCenter connection.
+.DESCRIPTION 
+	The script copy on a datastore the offline bundle and execute the installation using the ESXCLI interface.
+.NOTES  
+    Author:  Alessandro Lorusso, alorusso@vmware.com
+.PARAMETER Datastorename
+    The Name of the datastore used for hosting the offline bundle.
+.PARAMETER Hostname
+	The ESXi IP address or FQDN
+.PARAMETER Filepath
+	The filepath of the offline bundle
+.PARAMETER dryrun
+	By default the script doesn't install the software. Set this parameter to $false to install the VIB
+.PARAMETER credential
+	It is possible to use PSCredential object to pass the authentication
+.EXAMPLE
+	./Install-VIB-VMhost.ps1 -hostname esx-01a.corp.local -filepath c:\n1k.zip -dryrun $false
 #>
 
 Param(
